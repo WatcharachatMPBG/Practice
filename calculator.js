@@ -120,6 +120,8 @@ function getUsableHostIPRange()
     if(finish <= 0)
         finish = 0;
     finish = convertIntToIP(finish);
+    if(((document.getElementById("subnet").value).split(","))[1] >= 31)
+        return "NA"
     return start+" - "+finish;
 }
 function getBroadcastAddress()
