@@ -3,6 +3,74 @@ function alarm()
     alert(document.getElementById("ipAddress").value);
 }
 
+function convertNumToMask(tackle)
+{
+    var box = ""
+    var i=0;
+    for (;i<tackle;i++)
+        box = box+"1";
+    for (;j<32;i++)
+        box = box+"0";
+    return box;
+}
+
+function convertIPToInt(tackle)
+{
+    var box = tackle.split(".");
+    var ans = parseInt(box[0])*(Math.pow(2, 24));
+    ans = ans+(parseInt(box[1])*(Math.pow(2, 16)));
+    ans = ans+(parseInt(box[2])*(Math.pow(2, 8)));
+    ans = ans+parseInt(box[3]);
+    return ans;
+}
+
+function convertIntToIP(tackle)
+{
+    return ((tackle>>>24)+'.'+(tackle>>16 & 255)+'.'+(tackle>>8 & 255)+'.'+(tackle & 255));
+}
+
+
+function getIPAddress()
+{
+    return document.getElementById('ipAddress').value;
+}
+function getNetworkAddress()
+{
+    
+    var ip = document.getElementById('ipAddress').value;
+    var num = ip.split(".");
+    var first = parseInt(num[0]);
+    var second = parseInt(num[1]);
+    var third = parseInt(num[2]);
+    var fourth = parseInt(num[3]);
+
+    var subnet = document.getElementById("subnet").value;
+
+    var bitnumber = subnet.split(",");
+    var bitnum = bitnumber[0].split(".");
+    var bitfirst = parseInt(bitnum[0]);
+    var bitsecond = parseInt(bitnum[1]);
+    var bitthird = parseInt(bitnum[2]);
+    var bitfourth = parseInt(bitnum[3]);
+    first = first & bitfirst;
+    second = second & bitsecond;
+    third = third & bitthird;
+    fourth = fourth & bitfourth;
+    return first+"."+second+"."+third+"."+fourth;
+}
+function getUsableHostIPRange()
+{
+    var start = getNetworkAddress();
+    var box = start.split(".");
+    box[3] = parseInt(box[3])+1;
+    start = box[0]+"."+box[1]+"."+box[2]+"."+box[3];
+    var finish = convertIPToInt(start);
+    var num = 32-((document.getElementById("subnet").value).split(","))[1];
+    finish = finish+(Math.pow(2, num))-2;
+    finish = convertIntToIP(finish);
+    return start+" - "+finish;
+}
+
 function generate_table1() 
 {
     // get the reference for the body
@@ -51,14 +119,14 @@ function generate_table1()
     var cell11_0 = document.createElement("td");
     var cell11_1 = document.createElement("td");
 
-    var cellText0_0 = document.createTextNode("IP Adress:");
-    var cellText0_1 = document.createTextNode("");
+    var cellText0_0 = document.createTextNode("IP Address:");
+    var cellText0_1 = document.createTextNode(getIPAddress());
 
-    var cellText1_0 = document.createTextNode("Network Adress:");
-    var cellText1_1 = document.createTextNode("");
+    var cellText1_0 = document.createTextNode("Network Address:");
+    var cellText1_1 = document.createTextNode(getNetworkAddress());
     
     var cellText2_0 = document.createTextNode("Usable Host IP Range:");
-    var cellText2_1 = document.createTextNode("");
+    var cellText2_1 = document.createTextNode(getUsableHostIPRange());
 
     var cellText3_0 = document.createTextNode("Broadcast Address:");
     var cellText3_1 = document.createTextNode("");
