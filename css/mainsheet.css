@@ -1,6 +1,25 @@
 body
 {
     font: normal 16px Arial, Helvetica, sans-serif;
+    line-height:1.6em;
+    width:80%;
+	margin:auto;
+}
+
+form
+{
+    font: normal 16px Arial, Helvetica, sans-serif;
+    line-height:1.6em;
+    width:80%;
+	margin:auto;
+}
+
+table
+{
+    font: normal 16px Arial, Helvetica, sans-serif;
+    line-height:1.6em;
+    width:80%;
+	margin:auto;
 }
 
 .button 
