@@ -454,7 +454,12 @@ function generate_table2()
 
 function generate_tables()
 {
-    deleteTables();
-    generate_table1();
-    generate_table2();
+    if(getIPAddress() == '')
+        alert("Please Input Your IP Address");
+    else
+    {
+        deleteTables();
+        generate_table1();
+        generate_table2();
+    }
 } 
