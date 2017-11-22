@@ -1,8 +1,10 @@
-body{
+body
+{
     font: normal 16px Arial, Helvetica, sans-serif;
 }
 
-.button {
+.button 
+{
     background-color: lightblue;
     border: lightgray;
     color: darkblue;
@@ -16,16 +18,4 @@ body{
 
 .buttonAny{
     border-radius: 3px;
-}
-
-.buttonA{
-    border-radius: 50%;
-}
-
-.buttonB{
-    border-radius: 50%;
-}
-
-.buttonC{
-    border-radius: 50%;
 }

@@ -46,6 +46,22 @@ function convertIPToInt(tackle)
     return ans;
 }
 
+function convertIntoBinary(tackle)
+{
+    var ans = ""
+    for (var n=31;n >= 0;n--)
+    {
+        if(tackle >=  (Math.pow(2, n)))
+        {
+            tackle = tackle - (Math.pow(2, n));
+            ans = ans+"1";
+        }
+        else
+            ans = ans+"0";
+    }
+    return ans;
+}
+
 function convertIntToIP(tackle)
 {
     return ((tackle>>>24)+'.'+(tackle>>16 & 255)+'.'+(tackle>>8 & 255)+'.'+(tackle & 255));
@@ -55,6 +71,18 @@ function convertIntToIP(tackle)
 function getIPAddress()
 {
     return document.getElementById('ipAddress').value;
+}
+function getReverseLookUp()
+{
+    
+    var ip = document.getElementById('ipAddress').value;
+    var num = ip.split(".");
+    var first = parseInt(num[0]);
+    var second = parseInt(num[1]);
+    var third = parseInt(num[2]);
+    var fourth = parseInt(num[3]);
+
+    return fourth+"."+third+"."+second+"."+first+".in-addr.arpa";
 }
 function getNetworkAddress()
 {
@@ -156,14 +184,23 @@ function getIPType()
     //else
      //   return "Private"
 }
-
+function getIPv4MappedAddress()
+{
+    var box = (convertIPToInt(getIPAddress())).toString(16);
+    var ans = "";
+    for(var i = 0;i<box.length;i++)
+    {
+        ans = ans+box[i];
+        if(i==3)
+            ans = ans + ".";
+    }
+    return ans;
+}
 
 function generate_table1() 
 {
-    deleteTables()
     // get the reference for the body
-    var body = document.getElementsByTagName("body")[0];
-   
+    var body = document.getElementById("table1");   
     // creates a <table> element and a <tbody> element
     var tbl = document.createElement("table");
     var tblBody = document.createElement("tbody");
@@ -314,3 +351,110 @@ function generate_table1()
     // sets the border attribute of tbl to 2;
     tbl.setAttribute("border", "2");
 }
+
+function generate_table2() 
+{
+    // get the reference for the body
+    var body = document.getElementById("table2");   
+    // creates a <table> element and a <tbody> element
+    var tbl = document.createElement("table");
+    var tblBody = document.createElement("tbody");
+   
+    // creating all cells
+    var row0 = document.createElement("tr");
+    var row1 = document.createElement("tr");
+    var row2 = document.createElement("tr");
+    var row3 = document.createElement("tr");
+    var row4 = document.createElement("tr");
+    var row5 = document.createElement("tr");
+    var row6 = document.createElement("tr");
+
+    var cell0_0 = document.createElement("td");
+    var cell0_1 = document.createElement("td");
+    var cell1_0 = document.createElement("td");
+    var cell1_1 = document.createElement("td");
+    var cell2_0 = document.createElement("td");
+    var cell2_1 = document.createElement("td");
+    var cell3_0 = document.createElement("td");
+    var cell3_1 = document.createElement("td");
+    var cell4_0 = document.createElement("td");
+    var cell4_1 = document.createElement("td");
+    var cell5_0 = document.createElement("td");
+    var cell5_1 = document.createElement("td");
+    var cell6_0 = document.createElement("td");
+    var cell6_1 = document.createElement("td");
+
+    var cellText0_0 = document.createTextNode("Short:");
+    var cellText0_1 = document.createTextNode(getIPAddress()+" /"+((document.getElementById("subnet").value).split(","))[1]);
+
+    var cellText1_0 = document.createTextNode("Binary ID:");
+    var cellText1_1 = document.createTextNode(convertIntoBinary(convertIPToInt(getIPAddress())));
+    
+    var cellText2_0 = document.createTextNode("Integer ID:");
+    var cellText2_1 = document.createTextNode(convertIPToInt(getIPAddress()));
+
+    var cellText3_0 = document.createTextNode("Hex ID:");
+    var cellText3_1 = document.createTextNode("0x"+(convertIPToInt(getIPAddress())).toString(16));
+    
+    var cellText4_0 = document.createTextNode("in-addr.arpa:");
+    var cellText4_1 = document.createTextNode(getReverseLookUp());
+    
+    var cellText5_0 = document.createTextNode("IPv4 Mapped Address:");
+    var cellText5_1 = document.createTextNode("::ffff:"+getIPv4MappedAddress());
+    
+    var cellText6_0 = document.createTextNode("6to4 Prefix:");
+    var cellText6_1 = document.createTextNode("2002:"+getIPv4MappedAddress()+"::/48");
+        
+    cell0_0.appendChild(cellText0_0);
+    cell0_1.appendChild(cellText0_1);
+    cell1_0.appendChild(cellText1_0);
+    cell1_1.appendChild(cellText1_1);
+    cell2_0.appendChild(cellText2_0);
+    cell2_1.appendChild(cellText2_1);
+    cell3_0.appendChild(cellText3_0);
+    cell3_1.appendChild(cellText3_1);
+    cell4_0.appendChild(cellText4_0);
+    cell4_1.appendChild(cellText4_1);
+    cell5_0.appendChild(cellText5_0);
+    cell5_1.appendChild(cellText5_1);
+    cell6_0.appendChild(cellText6_0);
+    cell6_1.appendChild(cellText6_1);
+    
+    row0.appendChild(cell0_0);
+    row0.appendChild(cell0_1);
+    row1.appendChild(cell1_0);
+    row1.appendChild(cell1_1);
+    row2.appendChild(cell2_0);
+    row2.appendChild(cell2_1);
+    row3.appendChild(cell3_0);
+    row3.appendChild(cell3_1);
+    row4.appendChild(cell4_0);
+    row4.appendChild(cell4_1);
+    row5.appendChild(cell5_0);
+    row5.appendChild(cell5_1);
+    row6.appendChild(cell6_0);
+    row6.appendChild(cell6_1);
+
+    tblBody.appendChild(row0);
+    tblBody.appendChild(row1);
+    tblBody.appendChild(row2);
+    tblBody.appendChild(row3);
+    tblBody.appendChild(row4);
+    tblBody.appendChild(row5);
+    tblBody.appendChild(row6);
+
+    // put the <tbody> in the <table>
+    tbl.appendChild(tblBody);
+    // appends <table> into <body>
+    body.appendChild(tbl);
+    // sets the border attribute of tbl to 2;
+    tbl.setAttribute("border", "2");
+}
+
+
+function generate_tables()
+{
+    deleteTables();
+    generate_table1();
+    generate_table2();
+} 
