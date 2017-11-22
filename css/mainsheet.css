@@ -1,0 +1,31 @@
+body{
+    font: normal 16px Arial, Helvetica, sans-serif;
+}
+
+.button {
+    background-color: lightblue;
+    border: lightgray;
+    color: darkblue;
+    padding: 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+}
+
+.buttonAny{
+    border-radius: 3px;
+}
+
+.buttonA{
+    border-radius: 50%;
+}
+
+.buttonB{
+    border-radius: 50%;
+}
+
+.buttonC{
+    border-radius: 50%;
+}
