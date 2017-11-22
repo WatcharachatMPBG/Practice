@@ -2,7 +2,12 @@ function alarm()
 {
     alert(document.getElementById("ipAddress").value);
 }
-
+function deleteTables()
+{
+    var tables= document.getElementsByTagName('table');
+    while (tables.length>0)
+        tables[0].parentNode.removeChild(tables[0]);
+}
 function convertNumToMask(tackle)
 {
     var box = ""
@@ -12,6 +17,23 @@ function convertNumToMask(tackle)
     for (;j<32;i++)
         box = box+"0";
     return box;
+}
+function convertNumToIPMask(tackle)
+{
+    var box = ""
+    var i=0;
+    for (;i<tackle;i++)
+        box = box+"1";
+    for (;i<32;i++)
+        box = box+"0";
+    var ans = "";
+    for(var n=0;n<32;n++)
+    {
+        ans = ans+box[n];
+        if(((n+1)%8 == 0) && n != 31)
+            ans=ans+".";
+    }
+    return ans;
 }
 
 function convertIPToInt(tackle)
@@ -67,12 +89,78 @@ function getUsableHostIPRange()
     var finish = convertIPToInt(start);
     var num = 32-((document.getElementById("subnet").value).split(","))[1];
     finish = finish+(Math.pow(2, num))-2;
+    if(finish <= 0)
+        finish = 0;
     finish = convertIntToIP(finish);
     return start+" - "+finish;
 }
+function getBroadcastAddress()
+{
+    var ip = convertIPToInt(document.getElementById('ipAddress').value);
+    var mask = convertIPToInt(((document.getElementById("subnet").value).split(","))[0]);
+    var ans = ip | (~mask);
+    var box = convertIntToIP(ans);
+    return box;
+}
+function getTotalNumberofHost()
+{
+    var num = 32-((document.getElementById("subnet").value).split(","))[1];
+    if(num > 0)
+        num = Math.pow(2, num);
+    else
+        num = 0;
+    return num;
+}
+function getTotalNumberofUsableHost()
+{
+    var num = 32-((document.getElementById("subnet").value).split(","))[1];
+    num = Math.pow(2, num);
+    if(num > 2)
+        num = num-2;
+    else
+        num = 0;
+    return num;
+}
+function getWildCardMask()
+{
+    var num = 32-((document.getElementById("subnet").value).split(","))[1];
+    num = Math.pow(2, num);
+    if(num >= 1)
+        var ans = convertIntToIP(num-1);
+    else
+        var ans = convertIntToIP(0);
+    return ans;
+}
+function getIPCLASS()
+{
+    var num = ((document.getElementById("subnet").value).split(","))[1];
+    if(num >= 24)
+        var ans = "C";
+    else if(num >= 16)
+        var ans = "B";
+    else if(num >= 8)
+        var ans = "A";
+    else
+        var ans = "Classless"
+    return ans;
+}
+function getIPType()
+{
+    var num = convertIPToInt(getIPAddress());
+    if((num >= convertIPToInt("10.0.0.0") && num <= convertIPToInt("10.255.255.255")) || 
+    (num >= convertIPToInt("172.16.0.0") && num <= convertIPToInt("172.31.255.255")) ||
+    (num >= convertIPToInt("192.168.0.0") && num <= convertIPToInt("192.168.255.255")))
+        return "Private";
+    else//(num >= convertIPToInt("1.0.0.0") && num < convertIPToInt("192.0.0.0"))
+        return "Public";
+    //else
+     //   return "Private"
+}
+
 
 function generate_table1() 
 {
+    deleteTables()
     // get the reference for the body
     var body = document.getElementsByTagName("body")[0];
    
@@ -129,31 +217,31 @@ function generate_table1()
     var cellText2_1 = document.createTextNode(getUsableHostIPRange());
 
     var cellText3_0 = document.createTextNode("Broadcast Address:");
-    var cellText3_1 = document.createTextNode("");
+    var cellText3_1 = document.createTextNode(getBroadcastAddress());
     
     var cellText4_0 = document.createTextNode("Total Number of Hosts:");
-    var cellText4_1 = document.createTextNode("");
+    var cellText4_1 = document.createTextNode(getTotalNumberofHost());
     
     var cellText5_0 = document.createTextNode("Number of Usable Hosts:");
-    var cellText5_1 = document.createTextNode("");
+    var cellText5_1 = document.createTextNode(getTotalNumberofUsableHost());
     
     var cellText6_0 = document.createTextNode("Subnet Mask:");
-    var cellText6_1 = document.createTextNode("");
+    var cellText6_1 = document.createTextNode(((document.getElementById("subnet").value).split(","))[0]);
     
     var cellText7_0 = document.createTextNode("Wildcard Mask:");
-    var cellText7_1 = document.createTextNode("");
+    var cellText7_1 = document.createTextNode(getWildCardMask());
     
     var cellText8_0 = document.createTextNode("Binary Subnet Mask:");
-    var cellText8_1 = document.createTextNode("");
+    var cellText8_1 = document.createTextNode(convertNumToIPMask(((document.getElementById("subnet").value).split(","))[1]));
 
     var cellText9_0 = document.createTextNode("IP Class:");
-    var cellText9_1 = document.createTextNode("");
+    var cellText9_1 = document.createTextNode(getIPCLASS());
     
     var cellText10_0 = document.createTextNode("CIDR Notation:");
-    var cellText10_1 = document.createTextNode("");
+    var cellText10_1 = document.createTextNode("/"+((document.getElementById("subnet").value).split(","))[1]);
     
     var cellText11_0 = document.createTextNode("IP Type:");
-    var cellText11_1 = document.createTextNode("");
+    var cellText11_1 = document.createTextNode(getIPType());
 
         
     cell0_0.appendChild(cellText0_0);
